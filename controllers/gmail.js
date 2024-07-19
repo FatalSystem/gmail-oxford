@@ -45,11 +45,11 @@ function checkNewEmails(auth) {
               whiteList.some((word) =>
                 body?.toLowerCase().includes(word.toLowerCase())
               ) &&
-              listEmail.some((email) =>
+              listEmail.filter((email) =>
                 msg.payload.headers
                   ?.find((info) => info.name.includes("From"))
                   ?.value.includes(email)
-              ) !== -1;
+              ).length > 0;
 
             console.log("🚀 ~ isSendMessage:", isSendMessage);
 
@@ -57,17 +57,18 @@ function checkNewEmails(auth) {
               "<b><u>Current time</u>: </b>" + new Date().toTimeString();
             const actionToTake =
               "<b><u>Action To Take</u>: </b>" +
-              text?.slice(0, text.indexOf(")") + 1);
+              text.slice(0, text.indexOf(")") + 1);
             const customMessage =
               "🏦 OXFORD %0A" + actionToTake + "%0A" + currentTime;
             const label = "OXFORD";
 
             // Mark message as read before sending
-            await markMessageAsRead(auth, message.id, label);
+            isSendMessage && (await markMessageAsRead(auth, message.id, label));
 
             // Send message to bot
 
-            await sendMessageToBot(customMessage, isSendMessage);
+            isSendMessage &&
+              (await sendMessageToBot(customMessage, isSendMessage));
           }
         }
       } else {
