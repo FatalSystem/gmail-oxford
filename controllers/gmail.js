@@ -2,8 +2,8 @@ const { google } = require("googleapis");
 const axios = require("axios");
 const processedMessages = new Set(); // To keep track of processed messages
 let isProcessing = false; // To ensure only one processing cycle runs at a time
-const listEmail = [" oxford@mp.oxfordclub.com", "oxford@mb.oxfordclub.com"];
-const whiteList = ["action to take", "buy"];
+const listEmail = ["oxford@mp.oxfordclub.com", "oxford@mb.oxfordclub.com"];
+const whiteList = ["action to take: buy"];
 const TELEGRAM_TOKEN = "7266099507:AAG5KFAjz1QTxncX6AOOIIlyh4nR0ma4LLo";
 const regex = new RegExp(`\\b${"Action to Take: Buy"}\\b`, "i");
 
@@ -51,7 +51,14 @@ function checkNewEmails(auth) {
                   ?.value.includes(email)
               ).length > 0;
 
-            console.log("🚀 ~ isSendMessage:", isSendMessage);
+            console.log(
+              "🚀 ~ isSendMessage:",
+              isSendMessage,
+              whiteList.filter((word) => {
+                console.log(word);
+                return body?.toLowerCase().includes(word.toLowerCase());
+              })
+            );
 
             const currentTime =
               "<b><u>Current time</u>: </b>" + new Date().toTimeString();
