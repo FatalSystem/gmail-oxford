@@ -12,7 +12,7 @@ function checkNewEmails(auth) {
   const gmail = google.gmail({ version: "v1", auth });
 
   setInterval(async () => {
-    if (isProcessing) return; // Prevent overlapping intervals
+    // if (isProcessing) return; // Prevent overlapping intervals
     isProcessing = true; // Mark as processing
 
     try {
